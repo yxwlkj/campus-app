@@ -1,0 +1,72 @@
+.nearby-page {
+  height: 100%;
+  background-color: #f5f5f5;
+}
+
+.nearby-header {
+  padding: 12px 16px;
+  background-color: white;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.nearby-header h2 {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.location-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.location-text {
+  font-size: 12px;
+  color: #666;
+}
+
+.refresh-btn {
+  border-radius: 20px;
+}
+
+.users-list {
+  padding: 12px;
+}
+
+.loading-text {
+  text-align: center;
+  padding: 20px;
+  color: #999;
+}
+
+.user-card {
+  margin-bottom: 12px;
+}
+
+.user-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.distance {
+  font-size: 12px;
+  color: #999;
+}
+
+.user-signature {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.user-tags {
+  flex-wrap: wrap;
+}
+
+.chat-btn {
+  border-radius: 20px;
+  background-color: #07c160;
+  border: none;
+}

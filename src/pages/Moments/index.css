@@ -1,0 +1,106 @@
+.moments-page {
+  height: 100%;
+  background-color: #f5f5f5;
+}
+
+.moments-header {
+  padding: 12px 16px;
+  background-color: white;
+  border-bottom: 1px solid #e5e5e5;
+  text-align: center;
+}
+
+.moments-header h2 {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.post-box {
+  margin: 12px;
+  padding: 12px;
+  background-color: white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.post-input {
+  flex: 1;
+  border: 1px solid #e5e5e5;
+  border-radius: 20px;
+  padding: 8px 16px;
+}
+
+.feeds-list {
+  padding: 0 12px 20px;
+}
+
+.feed-item {
+  background-color: white;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.feed-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.feed-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.feed-author {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.feed-time {
+  font-size: 12px;
+  color: #999;
+}
+
+.feed-content {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.feed-image {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  max-height: 300px;
+  object-fit: cover;
+}
+
+.feed-actions {
+  padding-top: 8px;
+  border-top: 1px solid #f5f5f5;
+}
+
+.likes-count {
+  font-size: 12px;
+  color: #999;
+}
+
+.comments-list {
+  margin-top: 8px;
+  padding-left: 8px;
+}
+
+.comment-item {
+  font-size: 12px;
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.comment-user {
+  color: #07c160;
+  font-weight: 500;
+}
