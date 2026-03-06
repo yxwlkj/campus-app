@@ -40,6 +40,10 @@ const App: React.FC = () => {
   // Tab切换事件，明确参数类型
   const handleTabChange = (key: string) => {
     setActiveKey(key);
+    // 点击聊天Tab时清空未读消息数，解决setNoticeCount未使用的警告
+    if (key === 'chat') {
+      setNoticeCount(0);
+    }
   };
 
   return (
