@@ -14,7 +14,7 @@ export default function Chat() {
   ]);
   const [inputMsg, setInputMsg] = useState('');
   const [showToolBar, setShowToolBar] = useState(false);
-  const [voiceText, setVoiceText] = useState(''); // 语音输入文字
+  const [_voiceText, setVoiceText] = useState(''); // 语音输入文字
   const [isListening, setIsListening] = useState(false); // 语音输入状态
   const toolBarRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null); // 相册/拍摄input
