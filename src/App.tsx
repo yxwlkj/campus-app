@@ -1,4 +1,5 @@
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import ChatList from './pages/ChatList';
 import Chat from './pages/Chat';
 import Errand from './pages/Errand';
@@ -27,6 +28,7 @@ function App() {
         <Route path="/mine" element={<Mine />} />
         <Route path="/profile" element={<Mine />} />
       </Routes>
+      <Analytics />
     </Router>
   );
 }
