@@ -1,44 +1,29 @@
 import { useNavigate } from 'react-router-dom';
 
-const contactList = [
-  { id: 1, name: '张三', avatar: '👨‍💼', letter: 'Z' },
-  { id: 2, name: '李四', avatar: '👩‍💻', letter: 'L' },
-  { id: 3, name: '王五', avatar: '👨‍🎓', letter: 'W' },
-];
-
-export default function Contact() {
+export default function Pay() {
   const navigate = useNavigate();
 
   return (
     <div style={{ maxWidth: 500, margin: '0 auto', height: '100vh', background: '#f5f5f5', display: 'flex', flexDirection: 'column' }}>
       <div style={{ background: '#07c160', color: '#fff', padding: '12px 16px', display: 'flex', alignItems: 'center' }}>
-        <div style={{ fontSize: 18, fontWeight: 'bold' }}>通讯录</div>
-        <button onClick={() => navigate('/addfriend')} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#fff', fontSize: 18 }}>➕</button>
+        <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', color: '#fff', fontSize: 18 }}>←</button>
+        <div style={{ marginLeft: 12, fontSize: 18, fontWeight: 'bold' }}>收付款</div>
       </div>
-      <div style={{ flex: 1, overflowY: 'auto' }}>
-        <div style={{ background: '#fff', padding: '12px 16px', borderBottom: '1px solid #eee' }}>
-          <div style={{ fontSize: 16, fontWeight: '500' }}>新的朋友</div>
+      <div style={{ flex: 1, padding: 20, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ background: '#fff', padding: '20px', borderRadius: 8, width: '100%', marginBottom: 16 }}>
+          <div style={{ fontSize: 16, fontWeight: '500', textAlign: 'center', marginBottom: 12 }}>付款码</div>
+          <div style={{ width: '100%', height: 150, background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32 }}>📷</div>
+          <div style={{ fontSize: 12, color: '#999', textAlign: 'center', marginTop: 8 }}>向商家付款时出示</div>
         </div>
-        <div style={{ background: '#fff', padding: '12px 16px', borderBottom: '1px solid #eee' }}>
-          <div style={{ fontSize: 16, fontWeight: '500' }}>群聊</div>
+        <div style={{ background: '#fff', padding: '20px', borderRadius: 8, width: '100%' }}>
+          <div style={{ fontSize: 16, fontWeight: '500', textAlign: 'center', marginBottom: 12 }}>收款码</div>
+          <div style={{ width: '100%', height: 150, background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32 }}>💰</div>
+          <div style={{ fontSize: 12, color: '#999', textAlign: 'center', marginTop: 8 }}>向朋友收款时出示</div>
         </div>
-        <div style={{ background: '#fff', padding: '12px 16px', borderBottom: '1px solid #eee' }}>
-          <div style={{ fontSize: 16, fontWeight: '500' }}>标签</div>
-        </div>
-        <div style={{ background: '#fff', padding: '12px 16px', borderBottom: '1px solid #eee' }}>
-          <div style={{ fontSize: 16, fontWeight: '500' }}>公众号</div>
-        </div>
-        <div style={{ marginTop: 16, background: '#fff', padding: '8px 16px', fontSize: 14, color: '#666' }}>Z</div>
-        {contactList.map(c => (
-          <div key={c.id} style={{ background: '#fff', padding: '12px 16px', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center' }}>
-            <div style={{ fontSize: 24, marginRight: 12 }}>{c.avatar}</div>
-            <div style={{ fontSize: 16 }}>{c.name}</div>
-          </div>
-        ))}
       </div>
       <div style={{ background: '#fff', borderTop: '1px solid #eee', display: 'flex', justifyContent: 'space-around', padding: '8px 0' }}>
         <button onClick={() => navigate('/chatlist')} style={{ background: 'none', border: 'none', fontSize: 12, color: '#666' }}>💬 聊天</button>
-        <button onClick={() => navigate('/contacts')} style={{ background: 'none', border: 'none', fontSize: 12, color: '#07c160' }}>👥 通讯录</button>
+        <button onClick={() => navigate('/contacts')} style={{ background: 'none', border: 'none', fontSize: 12, color: '#666' }}>👥 通讯录</button>
         <button onClick={() => navigate('/errand')} style={{ background: 'none', border: 'none', fontSize: 12, color: '#666' }}>🚗 跑腿</button>
         <button onClick={() => navigate('/discover')} style={{ background: 'none', border: 'none', fontSize: 12, color: '#666' }}>🔍 发现</button>
         <button onClick={() => navigate('/profile')} style={{ background: 'none', border: 'none', fontSize: 12, color: '#666' }}>👤 我的</button>

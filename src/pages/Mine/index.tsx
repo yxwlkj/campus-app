@@ -3,84 +3,35 @@ import { useNavigate } from 'react-router-dom';
 export default function Mine() {
   const navigate = useNavigate();
 
-  // 功能菜单
-  const menus = [
-    { id: 1, name: '服务', icon: '💳' },
-    { id: 2, name: '收藏', icon: '⭐' },
-    { id: 3, name: '相册', icon: '🖼️' },
-    { id: 4, name: '卡包', icon: '💳' },
-    { id: 5, name: '表情', icon: '😊' },
-    { id: 6, name: '设置', icon: '⚙️' },
-  ];
-
-  // TabBar 切换
-  const switchTab = (path: string) => {
-    navigate(path);
-  };
-
   return (
-    <div className="app-container">
-      {/* 顶部导航栏 */}
-      <div className="nav-bar nav-mine">
-        <div className="nav-title">我</div>
-        <div className="nav-icon">⚙️</div>
-      </div>
-
-      {/* 内容区域 */}
-      <div className="content">
-        {/* 个人信息 */}
-        <div className="user-info">
-          <div className="user-avatar">👤</div>
-          <div>
-            <div className="user-name">微信用户</div>
-            <div className="user-id">微信号：wx_123456</div>
-          </div>
-          <div className="func-arrow">→</div>
-        </div>
-
-        {/* 功能菜单 */}
-        <div className="card">
-          {menus.map(item => (
-            <div key={item.id} className="func-item">
-              <div className="func-icon">{item.icon}</div>
-              <div className="func-title">{item.name}</div>
-              <div className="func-arrow">→</div>
-            </div>
-          ))}
-        </div>
-
-        {/* 校园跑腿入口 */}
-        <div className="card" style={{ marginTop: '10px' }}>
-          <div className="func-item" onClick={() => switchTab('/errands')}>
-            <div className="func-icon">🚴</div>
-            <div className="func-title">校园跑腿</div>
-            <div className="func-arrow">→</div>
-          </div>
+    <div style={{ maxWidth: 500, margin: '0 auto', height: '100vh', background: '#f5f5f5', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ background: '#07c160', color: '#fff', padding: '20px 16px', display: 'flex', alignItems: 'center' }}>
+        <div style={{ fontSize: 32 }}>👤</div>
+        <div style={{ marginLeft: 12 }}>
+          <div style={{ fontSize: 18, fontWeight: 'bold' }}>我的账号</div>
+          <div style={{ fontSize: 14, opacity: 0.8 }}>微信号: xxxx-1234</div>
         </div>
       </div>
-
-      {/* 底部 TabBar */}
-      <div className="tab-bar">
-        <div className="tab-bar-item" onClick={() => switchTab('/chat')}>
-          <span className="tab-bar-icon">💬</span>
-          <span>微信</span>
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+        <div style={{ background: '#fff', padding: '12px 16px', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center' }}>
+          <span style={{ fontSize: 20, marginRight: 12 }}>💳</span>
+          <span style={{ fontSize: 16 }}>服务</span>
         </div>
-        <div className="tab-bar-item" onClick={() => switchTab('/contact')}>
-          <span className="tab-bar-icon">👥</span>
-          <span>通讯录</span>
+        <div style={{ background: '#fff', padding: '12px 16px', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center' }}>
+          <span style={{ fontSize: 20, marginRight: 12 }}>⚙️</span>
+          <span style={{ fontSize: 16 }}>设置</span>
         </div>
-        <div className="tab-bar-item" onClick={() => switchTab('/errands')}>
-          <span className="tab-bar-icon">🚴</span>
-          <span>跑腿</span>
+        <div style={{ background: '#fff', padding: '12px 16px', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center' }}>
+          <span style={{ fontSize: 20, marginRight: 12 }}>❓</span>
+          <span style={{ fontSize: 16 }}>帮助与反馈</span>
         </div>
-        <div className="tab-bar-item" onClick={() => switchTab('/discover')}>
-          <span className="tab-bar-icon">🔍</span>
-          <span>发现</span>
-        </div>
-        <div className="tab-bar-item active" onClick={() => switchTab('/mine')}>
-          <span className="tab-bar-icon">👤</span>
-          <span>我</span>
-        </div>
+      </div>
+      <div style={{ background: '#fff', borderTop: '1px solid #eee', display: 'flex', justifyContent: 'space-around', padding: '8px 0' }}>
+        <button onClick={() => navigate('/chatlist')} style={{ background: 'none', border: 'none', fontSize: 12, color: '#666' }}>💬 聊天</button>
+        <button onClick={() => navigate('/contacts')} style={{ background: 'none', border: 'none', fontSize: 12, color: '#666' }}>👥 通讯录</button>
+        <button onClick={() => navigate('/errand')} style={{ background: 'none', border: 'none', fontSize: 12, color: '#666' }}>🚗 跑腿</button>
+        <button onClick={() => navigate('/discover')} style={{ background: 'none', border: 'none', fontSize: 12, color: '#666' }}>🔍 发现</button>
+        <button onClick={() => navigate('/profile')} style={{ background: 'none', border: 'none', fontSize: 12, color: '#07c160' }}>👤 我的</button>
       </div>
     </div>
   );
