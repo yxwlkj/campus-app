@@ -1,17 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// 聊天列表数据
+// 模拟聊天列表数据
 const chatList = [
-  { id: 1, name: '张三', avatar: '👦', lastMsg: '今晚一起去图书馆吗？', time: '10:30' },
-  { id: 2, name: '李四', avatar: '👧', lastMsg: '作业发我一下', time: '09:45' },
-  { id: 3, name: '王五', avatar: '👨', lastMsg: '明天早八记得占座', time: '昨天' },
+  { id: 1, name: '张三', avatar: '👨‍💼' },
+  { id: 2, name: '李四', avatar: '👩‍💻' },
+  { id: 3, name: '王五', avatar: '👨‍🎓' },
 ];
 
-// 默认消息
+// 模拟默认消息
 const defaultMessages = [
-  { id: 1, content: '你好呀!', sender: 'other', time: '10:20' },
-  { id: 2, content: '你好~有什么事吗?', sender: 'me', time: '10:22' },
+  { id: 1, content: '你好！', sender: 'other', time: '10:00' },
+  { id: 2, content: '嗨，最近怎么样？', sender: 'me', time: '10:01' },
 ];
 
 export default function Chat() {
@@ -19,126 +19,154 @@ export default function Chat() {
   const [activeChat] = useState(chatList[0]);
   const [messages, setMessages] = useState(defaultMessages);
   const [inputMsg, setInputMsg] = useState('');
-  const [showMore, setShowMore] = useState(false);
+  // 控制顶部+号弹窗
+  const [showTopMenu, setShowTopMenu] = useState(false);
 
   // 发送消息
   const sendMessage = () => {
     if (!inputMsg.trim()) return;
     const newMsg = {
-      id: messages.length + 1,
+      id: Date.now(),
       content: inputMsg,
       sender: 'me',
-      time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
     setMessages([...messages, newMsg]);
     setInputMsg('');
-    
-    // 模拟对方回复
-    setTimeout(() => {
-      const replyMsg = {
-        id: messages.length + 2,
-        content: '收到啦～',
-        sender: 'other',
-        time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
-      };
-      setMessages(prev => [...prev, replyMsg]);
-    }, 1000);
   };
 
-  // 更多功能面板数据
-  const moreFeatures = [
-    { id: 1, name: '相册', icon: '🖼️' },
-    { id: 2, name: '拍摄', icon: '📷' },
-    { id: 3, name: '视频通话', icon: '📹' },
-    { id: 4, name: '位置', icon: '📍' },
-    { id: 5, name: '红包', icon: '🧧' },
-    { id: 6, name: '礼物', icon: '🎁' },
-    { id: 7, name: '转账', icon: '💸' },
-    { id: 8, name: '语音输入', icon: '🎤' },
-  ];
+  // 回车发送
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') sendMessage();
+  };
 
-  // TabBar 切换
-  const switchTab = (path: string) => {
-    navigate(path);
+  // 点击遮罩关闭弹窗
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.top-menu-container') && showTopMenu) {
+        setShowTopMenu(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [showTopMenu]);
+
+  // 顶部+号功能
+  const topMenuActions = {
+    groupChat: () => {
+      alert('发起群聊功能开发中~');
+      setShowTopMenu(false);
+    },
+    addFriend: () => {
+      alert('添加好友功能开发中~');
+      setShowTopMenu(false);
+    },
+    scan: () => {
+      alert('扫一扫功能开发中~');
+      setShowTopMenu(false);
+    },
+    pay: () => {
+      alert('收付款功能开发中~');
+      setShowTopMenu(false);
+    },
   };
 
   return (
-    <div className="app-container">
-      {/* 顶部导航栏 */}
-      <div className="nav-bar nav-chat">
-        <div className="nav-back">←</div>
-        <div className="nav-title">{activeChat.name}</div>
-        <div className="nav-icon">⋮</div>
-      </div>
+    <div style={{ maxWidth: '800px', margin: '0 auto', height: '100vh', display: 'flex', flexDirection: 'column', background: '#f5f5f5' }}>
+      {/* 顶部导航栏（微信风格，带+号菜单） */}
+      <div style={{ background: '#07c160', color: 'white', padding: '12px 16px', display: 'flex', alignItems: 'center', position: 'relative' }}>
+        <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', color: 'white', fontSize: '18px', cursor: 'pointer' }}>←</button>
+        <span style={{ marginLeft: '12px', fontSize: '18px', fontWeight: 'bold' }}>{activeChat.name}</span>
+        {/* 顶部右侧+号 */}
+        <button
+          onClick={() => setShowTopMenu(!showTopMenu)}
+          style={{ marginLeft: 'auto', background: 'none', border: 'none', color: 'white', fontSize: '20px', cursor: 'pointer' }}
+        >
+          +
+        </button>
 
-      {/* 聊天内容区 */}
-      <div className="chat-content">
-        <div className="chat-time">今天 10:00</div>
-        {messages.map(msg => (
-          <div key={msg.id} className={`chat-message ${msg.sender}`}>
-            {msg.sender === 'other' && <div className="chat-avatar">{activeChat.avatar}</div>}
-            <div className="chat-bubble">{msg.content}</div>
-            {msg.sender === 'me' && <div className="chat-avatar">👤</div>}
-          </div>
-        ))}
-      </div>
-
-      {/* 底部输入区 + 功能面板 */}
-      <div className="chat-bottom">
-        <div className="chat-input-row">
-          <div className="input-icon">📢</div>
-          <input
-            type="text"
-            className="chat-input"
-            placeholder="输入消息..."
-            value={inputMsg}
-            onChange={(e) => setInputMsg(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-          />
-          <div className="input-icon" onClick={() => setShowMore(!showMore)}>😊</div>
-          <div className="input-icon" onClick={() => setShowMore(!showMore)}>➕</div>
-        </div>
-
-        {/* 更多功能面板 */}
-        {showMore && (
-          <div className="more-panel">
-            <div className="more-grid">
-              {moreFeatures.map(item => (
-                <div key={item.id} className="more-item">
-                  <div className="more-icon">{item.icon}</div>
-                  <div className="more-name">{item.name}</div>
-                </div>
-              ))}
+        {/* 👇 新增：顶部+号弹窗菜单（微信完整功能） */}
+        {showTopMenu && (
+          <div className="top-menu-container" style={{
+            position: 'absolute',
+            top: '100%',
+            right: '16px',
+            background: '#2e2e2e',
+            borderRadius: '8px',
+            width: '200px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+            zIndex: 1000,
+          }}>
+            {/* 发起群聊 */}
+            <div
+              onClick={topMenuActions.groupChat}
+              style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', cursor: 'pointer', borderBottom: '1px solid #3a3a3a' }}
+            >
+              <span style={{ fontSize: '20px', marginRight: '12px' }}>👥</span>
+              <span style={{ color: 'white', fontSize: '14px' }}>发起群聊</span>
             </div>
-            <div style={{ textAlign: 'center', padding: '10px', fontSize: '12px', color: '#999' }}>
-              ⚪ ⚪
+            {/* 添加朋友 */}
+            <div
+              onClick={topMenuActions.addFriend}
+              style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', cursor: 'pointer', borderBottom: '1px solid #3a3a3a' }}
+            >
+              <span style={{ fontSize: '20px', marginRight: '12px' }}>➕</span>
+              <span style={{ color: 'white', fontSize: '14px' }}>添加朋友</span>
+            </div>
+            {/* 扫一扫 */}
+            <div
+              onClick={topMenuActions.scan}
+              style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', cursor: 'pointer', borderBottom: '1px solid #3a3a3a' }}
+            >
+              <span style={{ fontSize: '20px', marginRight: '12px' }}>📷</span>
+              <span style={{ color: 'white', fontSize: '14px' }}>扫一扫</span>
+            </div>
+            {/* 收付款 */}
+            <div
+              onClick={topMenuActions.pay}
+              style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+            >
+              <span style={{ fontSize: '20px', marginRight: '12px' }}>💳</span>
+              <span style={{ color: 'white', fontSize: '14px' }}>收付款</span>
             </div>
           </div>
         )}
       </div>
 
-      {/* 底部 TabBar */}
-      <div className="tab-bar">
-        <div className="tab-bar-item active" onClick={() => switchTab('/chat')}>
-          <span className="tab-bar-icon">💬</span>
-          <span>微信</span>
-        </div>
-        <div className="tab-bar-item" onClick={() => switchTab('/contact')}>
-          <span className="tab-bar-icon">👥</span>
-          <span>通讯录</span>
-        </div>
-        <div className="tab-bar-item" onClick={() => switchTab('/errands')}>
-          <span className="tab-bar-icon">🚴</span>
-          <span>跑腿</span>
-        </div>
-        <div className="tab-bar-item" onClick={() => switchTab('/discover')}>
-          <span className="tab-bar-icon">🔍</span>
-          <span>发现</span>
-        </div>
-        <div className="tab-bar-item" onClick={() => switchTab('/mine')}>
-          <span className="tab-bar-icon">👤</span>
-          <span>我</span>
-        </div>
+      {/* 消息列表区域 */}
+      <div style={{ flex: 1, padding: '16px', overflowY: 'auto', background: '#f5f5f5' }}>
+        {messages.map((msg) => (
+          <div key={msg.id} style={{ display: 'flex', justifyContent: msg.sender === 'me' ? 'flex-end' : 'flex-start', marginBottom: '12px' }}>
+            {msg.sender === 'other' && <span style={{ fontSize: '24px', marginRight: '8px' }}>{activeChat.avatar}</span>}
+            <div style={{ maxWidth: '70%', background: msg.sender === 'me' ? '#95ec69' : 'white', padding: '8px 12px', borderRadius: '8px', boxShadow: '0 1px 2px rgba(0,0,0,0.1)' }}>
+              <p style={{ margin: 0, fontSize: '14px', lineHeight: '1.5' }}>{msg.content}</p>
+              <span style={{ fontSize: '10px', color: '#999', display: 'block', textAlign: 'right', marginTop: '4px' }}>{msg.time}</span>
+            </div>
+            {msg.sender === 'me' && <span style={{ fontSize: '24px', marginLeft: '8px' }}>👤</span>}
+          </div>
+        ))}
+      </div>
+
+      {/* 输入框区域 */}
+      <div style={{ padding: '8px 16px', background: 'white', borderTop: '1px solid #eee', display: 'flex', alignItems: 'center' }}>
+        <input
+          type="text"
+          value={inputMsg}
+          onChange={(e) => setInputMsg(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="输入消息..."
+          style={{ flex: 1, padding: '8px 12px', border: '1px solid #ddd', borderRadius: '20px', fontSize: '14px', outline: 'none' }}
+        />
+        <button onClick={sendMessage} style={{ marginLeft: '8px', padding: '8px 16px', background: '#07c160', color: 'white', border: 'none', borderRadius: '20px', fontSize: '14px', cursor: 'pointer' }}>发送</button>
+      </div>
+
+      {/* 底部导航（微信风格） */}
+      <div style={{ background: 'white', borderTop: '1px solid #eee', display: 'flex', justifyContent: 'space-around', padding: '8px 0' }}>
+        <button onClick={() => navigate('/')} style={{ background: 'none', border: 'none', fontSize: '12px', cursor: 'pointer', color: '#07c160' }}>💬 聊天</button>
+        <button onClick={() => navigate('/contacts')} style={{ background: 'none', border: 'none', fontSize: '12px', cursor: 'pointer', color: '#666' }}>👥 通讯录</button>
+        <button onClick={() => navigate('/discover')} style={{ background: 'none', border: 'none', fontSize: '12px', cursor: 'pointer', color: '#666' }}>🔍 发现</button>
+        <button onClick={() => navigate('/profile')} style={{ background: 'none', border: 'none', fontSize: '12px', cursor: 'pointer', color: '#666' }}>👤 我的</button>
       </div>
     </div>
   );
