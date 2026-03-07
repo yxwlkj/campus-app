@@ -15,24 +15,20 @@ export default function ChatList() {
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [showTopMenu, setShowTopMenu] = useState(false);
 
-  // 进入单聊窗口
   const goToChat = (item: typeof chatHistory[0]) => {
     navigate(`/chat/${item.id}`, { state: { name: item.name, avatar: item.avatar } });
   };
 
-  // 触发删除按钮显示
   const handleSwipe = (id: number) => {
     setDeleteId(deleteId === id ? null : id);
   };
 
-  // 删除聊天
   const deleteChat = (id: number, e: React.MouseEvent) => {
     e.stopPropagation();
     setHistoryList(prev => prev.filter(item => item.id !== id));
     setDeleteId(null);
   };
 
-  // 点击空白处关闭+号弹窗
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -43,9 +39,23 @@ export default function ChatList() {
   }, [showTopMenu]);
 
   return (
-    <div style={{ maxWidth: 500, margin: '0 auto', height: '100vh', background: '#f5f5f5', display: 'flex', flexDirection: 'column' }}>
-      {/* 顶部导航栏（微信绿色） */}
-      <div style={{ background: '#07c160', color: '#fff', padding: '12px 16px', display: 'flex', alignItems: 'center', position: 'relative', zIndex: 10 }}>
+    <div style={{ 
+      width: '100%', 
+      height: '100vh', 
+      background: '#f5f5f5', 
+      display: 'flex', 
+      flexDirection: 'column' 
+    }}>
+      {/* 顶部导航栏 */}
+      <div style={{ 
+        background: '#07c160', 
+        color: '#fff', 
+        padding: '12px 16px', 
+        display: 'flex', 
+        alignItems: 'center', 
+        position: 'relative',
+        zIndex: 10
+      }}>
         <div style={{ fontSize: 18, fontWeight: 'bold' }}>微信</div>
         <button
           onClick={(e) => { e.stopPropagation(); setShowTopMenu(!showTopMenu); }}
@@ -54,28 +64,38 @@ export default function ChatList() {
           +
         </button>
 
-        {/* 右上角+号菜单 */}
         {showTopMenu && (
           <div className="top-menu-container" style={{
-            position: 'absolute', top: '100%', right: 16, background: '#2f2f2f', borderRadius: 8, width: 200, boxShadow: '0 4px 12px rgba(0,0,0,0.3)', zIndex: 1000
+            position: 'absolute',
+            top: '100%',
+            right: 16,
+            background: '#2f2f2f',
+            borderRadius: 8,
+            width: 200,
+            boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+            zIndex: 1000,
           }}>
             <div onClick={() => { navigate('/group'); setShowTopMenu(false); }} style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', cursor: 'pointer', borderBottom: '1px solid #444' }}>
-              <span style={{ fontSize: 20, marginRight: 12 }}>👥</span><span style={{ color: '#fff', fontSize: 14 }}>发起群聊</span>
+              <span style={{ fontSize: 20, marginRight: 12 }}>👥</span>
+              <span style={{ color: '#fff', fontSize: 14 }}>发起群聊</span>
             </div>
             <div onClick={() => { navigate('/addfriend'); setShowTopMenu(false); }} style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', cursor: 'pointer', borderBottom: '1px solid #444' }}>
-              <span style={{ fontSize: 20, marginRight: 12 }}>➕</span><span style={{ color: '#fff', fontSize: 14 }}>添加朋友</span>
+              <span style={{ fontSize: 20, marginRight: 12 }}>➕</span>
+              <span style={{ color: '#fff', fontSize: 14 }}>添加朋友</span>
             </div>
             <div onClick={() => { navigate('/scan'); setShowTopMenu(false); }} style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', cursor: 'pointer', borderBottom: '1px solid #444' }}>
-              <span style={{ fontSize: 20, marginRight: 12 }}>📷</span><span style={{ color: '#fff', fontSize: 14 }}>扫一扫</span>
+              <span style={{ fontSize: 20, marginRight: 12 }}>📷</span>
+              <span style={{ color: '#fff', fontSize: 14 }}>扫一扫</span>
             </div>
             <div onClick={() => { navigate('/pay'); setShowTopMenu(false); }} style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-              <span style={{ fontSize: 20, marginRight: 12 }}>💳</span><span style={{ color: '#fff', fontSize: 14 }}>收付款</span>
+              <span style={{ fontSize: 20, marginRight: 12 }}>💳</span>
+              <span style={{ color: '#fff', fontSize: 14 }}>收付款</span>
             </div>
           </div>
         )}
       </div>
 
-      {/* 聊天列表（完整微信样式） */}
+      {/* 聊天列表 */}
       <div style={{ flex: 1, overflowY: 'auto' }}>
         {historyList.map(item => (
           <div
@@ -83,13 +103,19 @@ export default function ChatList() {
             onClick={() => goToChat(item)}
             onContextMenu={(e) => { e.preventDefault(); handleSwipe(item.id); }}
             onTouchStart={() => handleSwipe(item.id)}
-            style={{ background: '#fff', padding: '12px 16px', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', position: 'relative', height: 70 }}
+            style={{
+              background: '#fff',
+              padding: '12px 16px',
+              borderBottom: '1px solid #eee',
+              display: 'flex',
+              alignItems: 'center',
+              position: 'relative',
+              height: 70
+            }}
           >
-            {/* 头像 */}
             <div style={{ width: 48, height: 48, borderRadius: 4, background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, marginRight: 12 }}>
               {item.avatar}
             </div>
-            {/* 名称+最后消息 */}
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ fontSize: 16, fontWeight: '500' }}>{item.name}</div>
@@ -99,13 +125,11 @@ export default function ChatList() {
                 {item.lastMsg}
               </div>
             </div>
-            {/* 未读红点 */}
             {item.unread > 0 && (
               <div style={{ width: 20, height: 20, borderRadius: '50%', background: '#ff3b30', color: '#fff', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: 8 }}>
                 {item.unread}
               </div>
             )}
-            {/* 删除按钮 */}
             {deleteId === item.id && (
               <div onClick={(e) => deleteChat(item.id, e)} style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 80, background: '#ff3b30', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, cursor: 'pointer' }}>
                 删除
@@ -115,7 +139,7 @@ export default function ChatList() {
         ))}
       </div>
 
-      {/* 底部导航栏（含跑腿） */}
+      {/* 底部导航栏 */}
       <div style={{ background: '#fff', borderTop: '1px solid #eee', display: 'flex', justifyContent: 'space-around', padding: '8px 0' }}>
         <button onClick={() => navigate('/chatlist')} style={{ background: 'none', border: 'none', fontSize: 12, color: '#07c160' }}>💬 聊天</button>
         <button onClick={() => navigate('/contacts')} style={{ background: 'none', border: 'none', fontSize: 12, color: '#666' }}>👥 通讯录</button>
