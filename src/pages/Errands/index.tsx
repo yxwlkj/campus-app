@@ -1,177 +1,113 @@
 import { useState } from 'react';
-import { Tabs, Input, Button, List, Card, Tag, TextArea } from 'antd-mobile';
-import './index.css';
+import { useNavigate } from 'react-router-dom';
 
-const initialOrders = [
-  {
-    id: 1,
-    title: '代买奶茶',
-    desc: '蜜雪冰城的草莓摇摇奶昔，少糖少冰',
-    price: 15,
-    reward: 3,
-    location: '南区宿舍 → 商业街蜜雪冰城',
-    status: '待接单',
-    publishTime: '10分钟前',
-  },
-  {
-    id: 2,
-    title: '取快递',
-    desc: '菜鸟驿站12号柜，取件码123456',
-    price: 0,
-    reward: 5,
-    location: '菜鸟驿站 → 北区宿舍3栋',
-    status: '待接单',
-    publishTime: '30分钟前',
-  },
-  {
-    id: 3,
-    title: '代买食堂饭',
-    desc: '一食堂二楼的卤肉饭，加个煎蛋',
-    price: 12,
-    reward: 2,
-    location: '一食堂 → 图书馆',
-    status: '已接单',
-    publishTime: '1小时前',
-  },
+// 订单数据
+const orders = [
+  { id: 1, title: '代取快递', address: '菜鸟驿站3号柜', reward: 5, type: '校园内', status: '待接单' },
+  { id: 2, title: '代买早餐', address: '食堂一楼', reward: 3, type: '校园内', status: '待接单' },
+  { id: 3, name: '代买奶茶', address: '校门口蜜雪冰城', reward: 8, type: '校园外', status: '进行中' },
+  { id: 4, name: '代取外卖', address: '学校西门', reward: 4, type: '校园外', status: '已完成' },
 ];
 
 export default function Errands() {
-  const [orders, setOrders] = useState(initialOrders);
-  const [orderForm, setOrderForm] = useState({
-    title: '',
-    desc: '',
-    price: '',
-    reward: '',
-    location: '',
-  });
+  const navigate = useNavigate();
+  const [tab, setTab] = useState('all');
 
-  const handleFormChange = (key: keyof typeof orderForm, value: string) => {
-    setOrderForm({ ...orderForm, [key]: value });
-  };
+  // 筛选订单
+  const filteredOrders = tab === 'all'
+    ? orders
+    : orders.filter(o => o.type === (tab === 'inside' ? '校园内' : '校园外'));
 
-  const publishOrder = () => {
-    if (!orderForm.title || !orderForm.location) return;
-
-    const newOrder = {
-      id: Date.now(),
-      title: orderForm.title,
-      desc: orderForm.desc || '无备注',
-      price: Number(orderForm.price) || 0,
-      reward: Number(orderForm.reward) || 0,
-      location: orderForm.location,
-      status: '待接单',
-      publishTime: '刚刚',
-    };
-
-    setOrders([newOrder, ...orders]);
-    setOrderForm({ title: '', desc: '', price: '', reward: '', location: '' });
-  };
-
-  const takeOrder = (orderId: number) => {
-    setOrders(
-      orders.map(order => 
-        order.id === orderId ? { ...order, status: '已接单' } : order
-      )
-    );
+  // TabBar 切换
+  const switchTab = (path: string) => {
+    navigate(path);
   };
 
   return (
-    <div className="errands-page">
-      <Tabs defaultValue="list">
-        <Tabs.Tab title="订单列表" key="list">
-          <div className="orders-list">
-            {orders.map(order => (
-              <Card key={order.id} className="order-card">
-                <Card.Header
-                  title={order.title}
-                  extra={
-                    <Tag color={order.status === '待接单' ? 'orange' : 'green'}>
-                      {order.status}
-                    </Tag>
-                  }
-                />
-                <Card.Body>
-                  <List>
-                    <List.Item description={order.desc}>备注</List.Item>
-                    <List.Item description={order.location}>取送位置</List.Item>
-                    <List.Item description={`¥${order.price} + 小费¥${order.reward}`}>
-                      费用
-                    </List.Item>
-                    <List.Item description={order.publishTime}>发布时间</List.Item>
-                  </List>
-                </Card.Body>
-                <Card.Footer>
-                  {order.status === '待接单' && (
-                    <Button 
-                      type="primary" 
-                      size="small"
-                      onClick={() => takeOrder(order.id)}
-                      className="take-btn"
-                    >
-                      我要接单
-                    </Button>
-                  )}
-                </Card.Footer>
-              </Card>
-            ))}
-          </div>
-        </Tabs.Tab>
+    <div className="app-container">
+      {/* 顶部导航栏 */}
+      <div className="nav-bar nav-errands">
+        <div className="nav-title">校园跑腿</div>
+        <div className="nav-icon">🔍</div>
+      </div>
 
-        <Tabs.Tab title="发布订单" key="publish">
-          <div className="publish-form">
-            <List>
-              <List.Item label="订单标题">
-                <Input
-                  value={orderForm.title}
-                  onChange={(v: string) => handleFormChange('title', v)}
-                  placeholder="比如：代买奶茶、取快递"
-                />
-              </List.Item>
-              <List.Item label="订单描述">
-                <TextArea
-                  value={orderForm.desc}
-                  onChange={(v: string) => handleFormChange('desc', v)}
-                  placeholder="详细说明需求"
-                  rows={3}
-                />
-              </List.Item>
-              <List.Item label="商品金额">
-                <Input
-                  value={orderForm.price}
-                  onChange={(v: string) => handleFormChange('price', v)}
-                  placeholder="0"
-                  type="number"
-                  prefix="¥"
-                />
-              </List.Item>
-              <List.Item label="跑腿小费">
-                <Input
-                  value={orderForm.reward}
-                  onChange={(v: string) => handleFormChange('reward', v)}
-                  placeholder="0"
-                  type="number"
-                  prefix="¥"
-                />
-              </List.Item>
-              <List.Item label="取送位置">
-                <Input
-                  value={orderForm.location}
-                  onChange={(v: string) => handleFormChange('location', v)}
-                  placeholder="比如：南区宿舍 → 商业街"
-                />
-              </List.Item>
-            </List>
-
-            <Button 
-              type="primary" 
-              onClick={publishOrder}
-              className="publish-btn"
-            >
-              发布订单
-            </Button>
+      {/* 内容区域 */}
+      <div className="content">
+        {/* 功能入口 */}
+        <div className="errands-header">
+          <div style={{ display: 'flex', gap: '20px' }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '24px', marginBottom: '5px' }}>📝</div>
+              <div style={{ fontSize: '13px', color: '#333' }}>发布订单</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '24px', marginBottom: '5px' }}>🍱</div>
+              <div style={{ fontSize: '13px', color: '#333' }}>我的订单</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '24px', marginBottom: '5px' }}>👥</div>
+              <div style={{ fontSize: '13px', color: '#333' }}>跑腿员中心</div>
+            </div>
           </div>
-        </Tabs.Tab>
-      </Tabs>
+        </div>
+
+        {/* 订单筛选 */}
+        <div className="errands-tabs">
+          <div className={`errands-tab ${tab === 'all' ? 'active' : ''}`} onClick={() => setTab('all')}>
+            全部订单
+          </div>
+          <div className={`errands-tab ${tab === 'inside' ? 'active' : ''}`} onClick={() => setTab('inside')}>
+            校园内
+          </div>
+          <div className={`errands-tab ${tab === 'outside' ? 'active' : ''}`} onClick={() => setTab('outside')}>
+            校园外
+          </div>
+        </div>
+
+        {/* 订单列表 */}
+        {filteredOrders.map(order => (
+          <div key={order.id} className="order-item">
+            <div className="order-title">
+              <span>{order.title}</span>
+              <span className="order-price">¥{order.reward}</span>
+            </div>
+            <div className="order-info">地址：{order.address}</div>
+            <div className="order-info">类型：{order.type}</div>
+            <div style={{ marginTop: '8px' }}>
+              <span className={`order-status ${
+                order.status === '待接单' ? 'status-pending' : 
+                order.status === '进行中' ? 'status-running' : 'status-done'
+              }`}>
+                {order.status}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* 底部 TabBar */}
+      <div className="tab-bar">
+        <div className="tab-bar-item" onClick={() => switchTab('/chat')}>
+          <span className="tab-bar-icon">💬</span>
+          <span>微信</span>
+        </div>
+        <div className="tab-bar-item" onClick={() => switchTab('/contact')}>
+          <span className="tab-bar-icon">👥</span>
+          <span>通讯录</span>
+        </div>
+        <div className="tab-bar-item active" onClick={() => switchTab('/errands')}>
+          <span className="tab-bar-icon">🚴</span>
+          <span>跑腿</span>
+        </div>
+        <div className="tab-bar-item" onClick={() => switchTab('/discover')}>
+          <span className="tab-bar-icon">🔍</span>
+          <span>发现</span>
+        </div>
+        <div className="tab-bar-item" onClick={() => switchTab('/mine')}>
+          <span className="tab-bar-icon">👤</span>
+          <span>我</span>
+        </div>
+      </div>
     </div>
   );
 }

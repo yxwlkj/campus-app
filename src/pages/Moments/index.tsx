@@ -1,140 +1,123 @@
-import { useState } from 'react';
-import { Avatar, Input, Button, LikeButton, Space, Tag } from 'antd-mobile';
-import './index.css';
+import { useState } from 'react'
 
-const initialFeeds = [
+// 模拟动态数据
+const mockMoments = [
   {
     id: 1,
-    author: '小李',
-    avatar: 'https://picsum.photos/100/100?random=1',
-    content: '今天图书馆学习打卡～',
-    image: 'https://picsum.photos/400/300?random=10',
-    time: '1小时前',
-    likes: 12,
-    comments: [
-      { id: 101, user: '小张', content: '卷王！' },
-      { id: 102, user: '小王', content: '求带～' },
-    ],
-    isLiked: false,
+    user: '张三',
+    avatar: '👦',
+    content: '今天的晚霞好美！🌇',
+    image: 'https://picsum.photos/seed/sunset/400/300',
+    time: '2小时前',
+    likes: 23,
+    comments: 5,
   },
   {
     id: 2,
-    author: '辅导员',
-    avatar: 'https://picsum.photos/100/100?random=2',
-    content: '下周开始实习答辩，大家提前准备',
-    time: '3小时前',
-    likes: 28,
-    comments: [],
-    isLiked: true,
-  },
-  {
-    id: 3,
-    author: '校园跑腿',
-    avatar: 'https://picsum.photos/100/100?random=3',
-    content: '今日特价：奶茶代买8折！',
-    image: 'https://picsum.photos/400/300?random=11',
+    user: '李四',
+    avatar: '👧',
+    content: '图书馆学习打卡📚',
+    image: 'https://picsum.photos/seed/library/400/300',
     time: '5小时前',
-    likes: 45,
-    comments: [
-      { id: 103, user: '小明', content: '能代买食堂吗？' },
-    ],
-    isLiked: false,
+    likes: 15,
+    comments: 3,
   },
-];
+]
 
-export default function Moments() {
-  const [feeds, setFeeds] = useState(initialFeeds);
-  const [postContent, setPostContent] = useState('');
+function Moments() {
+  const [moments, setMoments] = useState(mockMoments)
+  const [newContent, setNewContent] = useState('')
 
-  const toggleLike = (feedId: number) => {
-    setFeeds(
-      feeds.map(feed => {
-        if (feed.id === feedId) {
-          const newLikes = feed.isLiked ? feed.likes - 1 : feed.likes + 1;
-          return { ...feed, isLiked: !feed.isLiked, likes: newLikes };
-        }
-        return feed;
-      })
-    );
-  };
-
-  const postFeed = () => {
-    if (!postContent.trim()) return;
-    
-    const newFeed = {
-      id: Date.now(),
-      author: '我',
-      avatar: 'https://picsum.photos/100/100?random=0',
-      content: postContent.trim(),
+  // 发布动态
+  const handlePublish = () => {
+    if (!newContent.trim()) return
+    const moment = {
+      id: moments.length + 1,
+      user: '我',
+      avatar: '👨',
+      content: newContent,
+      image: 'https://picsum.photos/seed/new/400/300',
       time: '刚刚',
       likes: 0,
-      comments: [],
-      isLiked: false,
-    };
-
-    setFeeds([newFeed, ...feeds]);
-    setPostContent('');
-  };
+      comments: 0,
+    }
+    setMoments([moment, ...moments])
+    setNewContent('')
+  }
 
   return (
     <div className="moments-page">
-      <div className="moments-header">
-        <h2>朋友圈</h2>
-      </div>
+      <h2>校园动态</h2>
 
-      <div className="post-box">
-        <Avatar src="https://picsum.photos/100/100?random=0" size="small" />
-        <Input
-          value={postContent}
-          onChange={setPostContent}
-          placeholder="分享新鲜事..."
-          className="post-input"
+      {/* 发布动态 */}
+      <div style={{ border: '1px solid #eee', borderRadius: '8px', padding: '20px', marginBottom: '20px' }}>
+        <textarea
+          placeholder="分享你的校园生活..."
+          value={newContent}
+          onChange={(e) => setNewContent(e.target.value)}
+          style={{
+            width: '100%',
+            minHeight: '100px',
+            padding: '10px',
+            border: '1px solid #ddd',
+            borderRadius: '6px',
+            outline: 'none',
+            resize: 'none',
+          }}
         />
-        <Button type="primary" onClick={postFeed} size="small">
-          发布
-        </Button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+          <span style={{ fontSize: '12px', color: '#999' }}>可添加图片/话题</span>
+          <button
+            onClick={handlePublish}
+            style={{
+              padding: '10px 20px',
+              border: 'none',
+              borderRadius: '20px',
+              backgroundColor: '#0071e3',
+              color: '#fff',
+              cursor: 'pointer',
+            }}
+          >
+            发布
+          </button>
+        </div>
       </div>
 
-      <div className="feeds-list">
-        {feeds.map(feed => (
-          <div key={feed.id} className="feed-item">
-            <div className="feed-header">
-              <Avatar src={feed.avatar} size="small" />
-              <div className="feed-info">
-                <span className="feed-author">{feed.author}</span>
-                <span className="feed-time">{feed.time}</span>
+      {/* 动态列表 */}
+      <div>
+        {moments.map(moment => (
+          <div
+            key={moment.id}
+            style={{
+              border: '1px solid #eee',
+              borderRadius: '8px',
+              padding: '20px',
+              marginBottom: '15px',
+              backgroundColor: '#fff',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+              <span style={{ fontSize: '28px' }}>{moment.avatar}</span>
+              <div>
+                <div style={{ fontWeight: '500' }}>{moment.user}</div>
+                <div style={{ fontSize: '12px', color: '#999' }}>{moment.time}</div>
               </div>
             </div>
-
-            <div className="feed-content">{feed.content}</div>
-            
-            {feed.image && (
-              <img src={feed.image} alt="feed-img" className="feed-image" />
-            )}
-
-            <div className="feed-actions">
-              <Space>
-                <LikeButton
-                  liked={feed.isLiked}
-                  onClick={() => toggleLike(feed.id)}
-                />
-                <span className="likes-count">{feed.likes} 赞</span>
-              </Space>
-
-              {feed.comments.length > 0 && (
-                <div className="comments-list">
-                  {feed.comments.map(comment => (
-                    <div key={comment.id} className="comment-item">
-                      <span className="comment-user">{comment.user}：</span>
-                      <span className="comment-content">{comment.content}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+            <p style={{ marginBottom: '10px' }}>{moment.content}</p>
+            <img
+              src={moment.image}
+              alt="动态图片"
+              style={{ width: '100%', borderRadius: '8px', marginBottom: '10px' }}
+            />
+            <div style={{ display: 'flex', gap: '20px', fontSize: '14px', color: '#666' }}>
+              <span>👍 {moment.likes}</span>
+              <span>💬 {moment.comments}</span>
             </div>
           </div>
         ))}
       </div>
     </div>
-  );
+  )
 }
+
+export default Moments

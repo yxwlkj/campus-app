@@ -1,68 +1,426 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* 全局重置 - 多端兼容 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent; /* 移除移动端点击高亮 */
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
+  font-family: "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  -webkit-font-smoothing: antialiased;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* 核心容器 - 响应式适配 */
+.app-container {
+  width: 100%;
+  max-width: 375px; /* 小程序/APP 最大宽度 */
   min-width: 320px;
-  min-height: 100vh;
+  height: 100vh;
+  margin: 0 auto;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* WEB 端美化 */
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
+/* 顶部导航栏 - 统一风格 */
+.nav-bar {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  color: #fff;
+  font-size: 17px;
   font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+/* 不同页面导航栏配色 */
+.nav-chat { background-color: #5799EF; }
+.nav-contact { background-color: #FF6B35; }
+.nav-errands { background-color: #07C160; }
+.nav-discover { background-color: #9C27B0; }
+.nav-mine { background-color: #FF9800; }
+
+.nav-back {
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.nav-title {
+  flex: 1;
+  text-align: center;
+}
+
+.nav-icon {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* 内容区域通用样式 */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #f5f9ff;
+  -webkit-overflow-scrolling: touch; /* 移动端顺滑滚动 */
+}
+
+/* 底部 TabBar - 多端适配 */
+.tab-bar {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #fff;
+  border-top: 1px solid #e0e0e0;
+}
+
+.tab-bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 11px;
+  color: #999;
+  cursor: pointer;
+}
+
+.tab-bar-item.active {
+  color: #5799EF;
+}
+
+.tab-bar-icon {
+  font-size: 20px;
+  margin-bottom: 2px;
+}
+
+/* ---------------- 聊天页面专属样式 ---------------- */
+.chat-content {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #f5f5f5;
+  padding: 10px;
+}
+
+.chat-time {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  margin: 10px 0;
+}
+
+.chat-message {
+  display: flex;
+  margin: 12px 0;
+}
+
+.chat-message.other {
+  justify-content: flex-start;
+}
+
+.chat-message.me {
+  justify-content: flex-end;
+}
+
+.chat-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin: 0 8px;
+}
+
+.chat-bubble {
+  max-width: 70%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.chat-message.other .chat-bubble {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+}
+
+.chat-message.me .chat-bubble {
+  background-color: #5799EF;
+  color: #fff;
+}
+
+/* 聊天输入区 + 功能面板 */
+.chat-bottom {
+  background-color: #f7f7f7;
+  border-top: 1px solid #e0e0e0;
+}
+
+.chat-input-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+}
+
+.input-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.chat-input {
+  flex: 1;
+  height: 36px;
+  padding: 0 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 18px;
+  outline: none;
+  font-size: 15px;
+  background-color: #fff;
+}
+
+/* 更多功能面板 */
+.more-panel {
+  background-color: #f7f7f7;
+  padding: 20px 15px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.more-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.more-item {
+  text-align: center;
+}
+
+.more-icon {
+  width: 50px;
+  height: 50px;
+  background-color: #fff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin: 0 auto 8px;
+}
+
+.more-name {
+  font-size: 13px;
+  color: #333;
+}
+
+/* ---------------- 通讯录页面专属样式 ---------------- */
+.contact-search {
+  padding: 10px 15px;
+  background-color: #f5f5f5;
+}
+
+.search-input {
+  width: 100%;
+  height: 36px;
+  padding: 0 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 18px;
+  outline: none;
+  font-size: 14px;
+  background-color: #fff;
+}
+
+.contact-list {
+  background-color: #fff;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.list-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-right: 12px;
+}
+
+.list-info {
+  flex: 1;
+}
+
+.list-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.list-desc {
+  font-size: 13px;
+  color: #999;
+}
+
+/* ---------------- 跑腿页面专属样式 ---------------- */
+.errands-header {
+  padding: 15px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.errands-tabs {
+  display: flex;
+  background-color: #fff;
+  margin: 0 15px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.errands-tab {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+  color: #666;
+  border-bottom: 2px solid transparent;
+}
+
+.errands-tab.active {
+  border-bottom: 2px solid #07C160;
+  color: #07C160;
+  font-weight: 500;
+}
+
+.order-item {
+  background-color: #fff;
+  margin: 10px 15px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.order-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.order-price {
+  color: #ff4d4f;
+}
+
+.order-info {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.order-status {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.status-pending { background-color: #ffc107; }
+.status-running { background-color: #07C160; }
+.status-done { background-color: #6c757d; }
+
+/* ---------------- 发现/我的页面通用样式 ---------------- */
+.card {
+  background-color: #fff;
+  margin-bottom: 10px;
+}
+
+.func-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.func-icon {
+  width: 24px;
+  height: 24px;
+  font-size: 20px;
+  margin-right: 15px;
+}
+
+.func-title {
+  flex: 1;
+  font-size: 16px;
+}
+
+.func-arrow {
+  font-size: 14px;
+  color: #999;
+}
+
+.user-info {
+  padding: 20px 15px;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #FF9800 0%, #FF5722 100%);
+  color: #fff;
+}
+
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  margin-right: 15px;
+}
+
+.user-name {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.user-id {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* 响应式适配 PC 端 */
+@media (min-width: 751px) {
+  .app-container {
+    border-radius: 10px;
+    margin: 20px auto;
+    height: calc(100vh - 40px);
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+  .tab-bar {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
   }
 }
