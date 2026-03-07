@@ -16,7 +16,7 @@ const defaultMessages = [
 
 export default function Chat() {
   const navigate = useNavigate();
-  const [activeChat, setActiveChat] = useState(chatList[0]);
+const [activeChat] = useState(chatList[0]);
   const [messages, setMessages] = useState(defaultMessages);
   const [inputMsg, setInputMsg] = useState('');
   const [showMore, setShowMore] = useState(false);
