@@ -1,14 +1,12 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>校园微信跑腿系统</title>
-  </head>
-  <body>
-    <!-- 必须有这个root节点，否则页面空白 -->
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<!-- PWA 核心配置 -->
+<link rel="manifest" href="/manifest.json">
+<!-- iOS 适配 -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#07c160">
+<meta name="apple-mobile-web-app-title" content="校园助手">
+<link rel="apple-touch-icon" href="/icon-192x192.png">
+<!-- 安卓适配 -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#07c160">
+<!-- 离线缓存（可选，增强体验） -->
+<link rel="icon" href="/icon-192x192.png" type="image/png">
